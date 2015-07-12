@@ -80,8 +80,3 @@ class HttpRequest
         $this->_post = $post;
     }
 }
-
-$o = new HttpRequest();
-$o->setUrl('http://devraph.net/api.php?option=test');
-$o->setPost(array('login' => 'raph', 'password' => 'demo'));
-$o->post();
