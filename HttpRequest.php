@@ -13,6 +13,7 @@ class HttpRequest
 {
     private $_url = "http://devraph.net/api.php";
     private $_post = array();
+    private $_timeout = "10";
 
     /**
      * Check if curl is enabled or disabled
@@ -37,6 +38,7 @@ class HttpRequest
         curl_setopt($ch, CURLOPT_URL, $this->_url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_post);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
         $output = curl_exec($ch);
         curl_close($ch);
         return $output;
@@ -55,6 +57,7 @@ class HttpRequest
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
         $output = curl_exec($ch);
         curl_close($ch);
         return $output;
@@ -78,5 +81,15 @@ class HttpRequest
     public function setPost($post)
     {
         $this->_post = $post;
+    }
+
+    /**
+     * Set timeout
+     *
+     * @param integet $timeout Timeout in second
+     */
+    public function setTimeout($timeout)
+    {
+        $this->_timeout = $timeout;
     }
 }
