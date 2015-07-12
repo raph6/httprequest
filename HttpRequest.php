@@ -43,6 +43,21 @@ class HttpRequest
     }
 
     /**
+     * Getting
+     *
+     * @return $output Returns TRUE on success or FALSE on failure.
+     */
+    public function get()
+    {
+        $this->_enableCurl();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->_url);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $output;
+    }
+
+    /**
      * Set url
      *
      * @param string $url The URL to fetch.
