@@ -2,7 +2,7 @@
 /**
  * @author Raphael BLEUZET <rbleuzet@gmail.com>
  */
-
+namespace HttpRequest;
 /**
  * Simple HttpRequest
  * Using curl
