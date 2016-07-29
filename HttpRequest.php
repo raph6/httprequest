@@ -11,9 +11,10 @@ namespace HttpRequest;
  */
 class HttpRequest
 {
-    private $_url = "http://devraph.net/api.php";
+    private $_url = "";
     private $_post = array();
-    private $_timeout = "10";
+    private $_timeout = 10;
+    private $_headers = array();
 
     /**
      * Check if curl is enabled or disabled
@@ -26,6 +27,18 @@ class HttpRequest
         }
     }
 
+    public function setHeaders($headers = array())
+    {
+        $reformated = [];
+
+        foreach ($headers as $key => $value) {
+            $reformated[] = $key . ': ' . $value;
+        }
+
+        $this->_headers = $reformated;
+
+        return true;
+    }
     /**
      * Execute your request
      *
@@ -37,6 +50,7 @@ class HttpRequest
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->_url);
         curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_post);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
         $output = curl_exec($ch);
@@ -55,8 +69,6 @@ class HttpRequest
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
         $output = curl_exec($ch);
         curl_close($ch);
