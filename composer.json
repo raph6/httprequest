@@ -1,0 +1,22 @@
+{
+    "name": "raph6/httprequest",
+    "description": "Make http request using curl",
+    "type": "library",
+    "authors": [
+        {
+            "name": "raph",
+            "email": "raphael.bleuzet@epitech.eu"
+        }
+    ],
+    "require": {
+        "php": "^7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}

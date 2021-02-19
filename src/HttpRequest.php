@@ -1,13 +1,13 @@
 <?php
 /**
- * @author Raphael BLEUZET <rbleuzet@gmail.com>
+ * @author Raphaël BLEUZET <https://github.com/raph6>
  */
-namespace HttpRequest;
+namespace raph6\HttpRequest;
 /**
  * Simple HttpRequest
  * Using curl
  *
- * @version 0.1
+ * @version 0.9
  */
 class HttpRequest
 {
