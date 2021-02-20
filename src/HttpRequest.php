@@ -11,20 +11,17 @@ namespace raph6\HttpRequest;
  */
 class HttpRequest
 {
-    private $_url = "";
-    private $_post = array();
+    private $_ch;
     private $_timeout = 10;
-    private $_headers = array();
 
-    /**
-     * Check if curl is enabled or disabled
-     */
-    private function _enableCurl()
-    {
+    public function __construct () {
         if (!function_exists('curl_version')) {
             echo 'Please enable php_curl';
-            exit;
+            die();
         }
+
+        $this->_ch = curl_init();
+        curl_setopt($this->_ch, CURLOPT_TIMEOUT, $this->_timeout);
     }
 
     public function setHeaders($headers = array())
@@ -35,73 +32,46 @@ class HttpRequest
             $reformated[] = $key . ': ' . $value;
         }
 
-        $this->_headers = $reformated;
+        curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $reformated);
 
-        return true;
-    }
-    /**
-     * Execute your request
-     *
-     * @return $output Returns TRUE on success or FALSE on failure.
-     */
-    public function post()
-    {
-        $this->_enableCurl();
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->_url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_post);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        return $output;
+        return $this;
     }
 
-    /**
-     * Getting
-     *
-     * @return $output Returns TRUE on success or FALSE on failure.
-     */
-    public function get()
-    {
-        $this->_enableCurl();
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        return $output;
-    }
-
-    /**
-     * Set url
-     *
-     * @param string $url The URL to fetch.
-     */
     public function setUrl($url)
     {
-        $this->_url = $url;
+        curl_setopt($this->_ch, CURLOPT_URL, $url);
+        return $this;
     }
 
-    /**
-     * Set an array with your post request
-     *
-     * @param array $post The full data to post in a HTTP "POST" operation.
-     */
-    public function setPost($post)
+    public function setData($post)
     {
-        $this->_post = $post;
+        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $post);
+        return $this;
     }
 
-    /**
-     * Set timeout
-     *
-     * @param integet $timeout Timeout in second
-     */
-    public function setTimeout($timeout)
+    public function post()
     {
-        $this->_timeout = $timeout;
+        curl_setopt($this->_ch, CURLOPT_POST, 1);
+        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($this->_ch);
+        curl_close($this->_ch);
+        return $output;
+    }
+
+    public function get()
+    {
+        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($this->_ch);
+        curl_close($this->_ch); 
+        return $output;
     }
 }
+
+
+// $http = new HttpRequest();
+// $http->setUrl('http://localhost:8080')
+//     ->setData(['foo' => 'bar'])
+//     ->setHeaders(['token' => '123456']);
+
+// var_dump($http->post());
+// //var_dump($http->get());
