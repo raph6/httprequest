@@ -13,6 +13,8 @@ class HttpRequest
 {
     private $_ch;
     private $_timeout = 10;
+    private $_url;
+    private $_data;
 
     public function __construct () {
         if (!function_exists('curl_version')) {
@@ -22,6 +24,7 @@ class HttpRequest
 
         $this->_ch = curl_init();
         curl_setopt($this->_ch, CURLOPT_TIMEOUT, $this->_timeout);
+        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
     }
 
     public function setHeaders($headers = array())
@@ -39,39 +42,42 @@ class HttpRequest
 
     public function setUrl($url)
     {
-        curl_setopt($this->_ch, CURLOPT_URL, $url);
+        $this->_url = $url;
         return $this;
     }
 
-    public function setData($post)
+    public function setData($data)
     {
-        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $post);
+        $this->_data = $data;
+        return $this;
+    }
+
+    public function setUserAgent($user_agent) {
+        curl_setopt($this->_ch, CURLOPT_USERAGENT, $user_agent);
         return $this;
     }
 
     public function post()
     {
-        curl_setopt($this->_ch, CURLOPT_POST, 1);
-        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
-        $output = curl_exec($this->_ch);
-        curl_close($this->_ch);
-        return $output;
+        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, http_build_query($this->_data, '', '&'));
+        curl_setopt($this->_ch, CURLOPT_POST, true);
+        return $this->_request();
     }
 
     public function get()
     {
-        curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
+        if (!empty($this->_data)) {
+            $this->_url .= (stripos($this->_url, '?') !== false) ? '&' : '?';
+            $this->_url .= (is_string($this->_data)) ? $this->_data : http_build_query($this->_data, '', '&');
+        }
+        curl_setopt($this->_ch, CURLOPT_HTTPGET, true);
+        return $this->_request();
+    }
+
+    private function _request() {
+        curl_setopt($this->_ch, CURLOPT_URL, $this->_url);
         $output = curl_exec($this->_ch);
         curl_close($this->_ch); 
         return $output;
     }
 }
-
-
-// $http = new HttpRequest();
-// $http->setUrl('http://localhost:8080')
-//     ->setData(['foo' => 'bar'])
-//     ->setHeaders(['token' => '123456']);
-
-// var_dump($http->post());
-// //var_dump($http->get());
