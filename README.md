@@ -1,5 +1,12 @@
 # HttpRequest
-## Example of use
+composer package for http request using curl
+
+### Installation
+```shell
+composer require raph6/httprequest
+```
+
+### Example of use
 ```php
 $http = new HttpRequest();
 $http->setUrl('http://localhost:8080')
