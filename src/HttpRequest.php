@@ -17,11 +17,6 @@ class HttpRequest
     private $_data;
 
     public function __construct () {
-        if (!function_exists('curl_version')) {
-            echo 'Please enable php_curl';
-            die();
-        }
-
         $this->_ch = curl_init();
         curl_setopt($this->_ch, CURLOPT_TIMEOUT, $this->_timeout);
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
