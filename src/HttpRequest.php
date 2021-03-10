@@ -24,6 +24,7 @@ class HttpRequest
 
     public function setBasicAuth($username, $password) {
         curl_setopt($this->_ch, CURLOPT_USERPWD, $username . ":" . $password);
+        return $this;
     }
 
     public function setHeaders($headers = array())
