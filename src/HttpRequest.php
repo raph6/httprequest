@@ -22,6 +22,10 @@ class HttpRequest
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
     }
 
+    public function setBasicAuth($username, $password) {
+        curl_setopt($this->_ch, CURLOPT_USERPWD, $username . ":" . $password);
+    }
+
     public function setHeaders($headers = array())
     {
         $reformated = [];
