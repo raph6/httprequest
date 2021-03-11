@@ -8,8 +8,13 @@ composer require raph6/httprequest
 
 ### Example of use
 ```php
-$http = new HttpRequest();
-$http->setUrl('http://localhost:8080')
+use raph6\HttpRequest\HttpRequest;
+
+$http = new HttpRequest('https://httpbin.org');
+# or 
+$http = new HttpRequest;
+$http->setUrl('https://httpbin.org')
+     ->setCookies(['bar' => 'foo'])
      ->setData(['foo' => 'bar'])
      ->setHeaders(['token' => '123456'])
      ->setUserAgent('PHP/Curl (https://github.com/raph6/httprequest)')
