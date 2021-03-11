@@ -7,7 +7,7 @@ namespace raph6\HttpRequest;
  * Simple HttpRequest
  * Using curl
  *
- * @version 0.9
+ * @version 1.1.5
  */
 class HttpRequest
 {
@@ -16,8 +16,11 @@ class HttpRequest
     private $_url;
     private $_data;
 
-    public function __construct () {
+    public function __construct ($url = null) {
         $this->_ch = curl_init();
+        if ($url !== null) {
+            $this->_url = $url;
+        }
         curl_setopt($this->_ch, CURLOPT_TIMEOUT, $this->_timeout);
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
     }
@@ -36,6 +39,18 @@ class HttpRequest
         }
 
         curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $reformated);
+
+        return $this;
+    }
+
+    public function setCookies($cookies = array()) {
+        $reformated = [];
+
+        foreach ($cookies as $key => $value) {
+            $reformated[] = $key . '=' . $value;
+        }
+
+        curl_setopt($this->_ch, CURLOPT_COOKIE, implode(';', $reformated));
 
         return $this;
     }
@@ -59,7 +74,9 @@ class HttpRequest
 
     public function post()
     {
-        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, http_build_query($this->_data, '', '&'));
+        if (!empty($this->_data)) {
+            curl_setopt($this->_ch, CURLOPT_POSTFIELDS, http_build_query($this->_data, '', '&'));
+        }
         curl_setopt($this->_ch, CURLOPT_POST, true);
         return $this->_request();
     }
@@ -68,7 +85,7 @@ class HttpRequest
     {
         if (!empty($this->_data)) {
             $this->_url .= (stripos($this->_url, '?') !== false) ? '&' : '?';
-            $this->_url .= (is_string($this->_data)) ? $this->_data : http_build_query($this->_data, '', '&');
+            $this->_url .= http_build_query($this->_data, '', '&');
         }
         curl_setopt($this->_ch, CURLOPT_HTTPGET, true);
         return $this->_request();
