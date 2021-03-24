@@ -68,4 +68,18 @@ class HttpRequestTest extends TestCase {
         $this->assertEquals($get['headers']['Bar'], $headers['Bar']);
         $this->assertEquals($get['headers']['Sess'], $headers['Sess']);
     }
+
+    public function testBasicAuth()
+    {
+        $username = 'raph6';
+        $password = 'password';
+
+        $http = new HttpRequest('https://httpbin.org/basic-auth/' . $username . '/' . $password);
+        $http->setBasicAuth($username, $password);
+        
+        $auth = json_decode($http->get(), true);
+
+        $this->assertEquals($auth['authenticated'], true);
+        $this->assertEquals($auth['user'], $username);
+    }
 }
