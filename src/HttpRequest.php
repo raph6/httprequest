@@ -12,7 +12,6 @@ namespace raph6\HttpRequest;
 class HttpRequest
 {
     private $_ch;
-    private $_timeout = 10;
     private $_url;
     private $_data;
 
@@ -21,10 +20,15 @@ class HttpRequest
         if ($url !== null) {
             $this->_url = $url;
         }
-        curl_setopt($this->_ch, CURLOPT_TIMEOUT, $this->_timeout);
+        curl_setopt($this->_ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->_ch, CURLOPT_FAILONERROR, true);
         curl_setopt($this->_ch, CURLOPT_FOLLOWLOCATION, true);
+    }
+
+    public function setTimeout($timeout) {
+        curl_setopt($this->_ch, CURLOPT_TIMEOUT, $timeout);
+        return $this;
     }
 
     public function setBasicAuth($username, $password) {
