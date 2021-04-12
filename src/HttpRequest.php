@@ -23,6 +23,8 @@ class HttpRequest
         }
         curl_setopt($this->_ch, CURLOPT_TIMEOUT, $this->_timeout);
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->_ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($this->_ch, CURLOPT_FOLLOWLOCATION, true);
     }
 
     public function setBasicAuth($username, $password) {
