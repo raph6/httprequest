@@ -7,7 +7,7 @@ namespace raph6\HttpRequest;
  * Simple HttpRequest
  * Using curl
  *
- * @version 1.1.5
+ * @version 1.1.6
  */
 class HttpRequest
 {
